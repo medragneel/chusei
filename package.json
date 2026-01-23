@@ -1,0 +1,23 @@
+{
+  "name": "chusei",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "server": "nodemon src/index.ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.19.9",
+    "dotenv": "^17.2.3",
+    "hono": "^4.11.4",
+    "html2pdf.js": "^0.14.0",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "nodemon": "^3.1.11",
+    "tsx": "^4.7.1",
+    "typescript": "^5.8.3"
+  }
+}

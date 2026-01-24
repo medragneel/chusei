@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.19.9",
+    "@types/handlebars": "^4.0.40",
     "dotenv": "^17.2.3",
+    "handlebars": "^4.7.8",
     "hono": "^4.11.4",
     "html2pdf.js": "^0.14.0",
     "ts-node": "^10.9.2"

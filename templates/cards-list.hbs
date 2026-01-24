@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>All Loyalty Cards</title>
+  <style>
+    body{font-family:Arial;max-width:1200px;margin:0 auto;padding:20px;background:#f5f5f5;}
+    h1{color:#667eea;}
+    table{width:100%;background:white;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+    th,td{padding:12px;text-align:left;border-bottom:1px solid #eee;}
+    th{background:#667eea;color:white;}
+    tr:hover{background:#f9f9f9;}
+    a{color:#667eea;text-decoration:none;font-weight:bold;}
+    a:hover{text-decoration:underline;}
+    .badge{display:inline-block;padding:4px 8px;border-radius:4px;font-size:12px;font-weight:bold;}
+    .active{background:#10b981;color:white;}
+    .inactive{background:#ef4444;color:white;}
+  </style>
+</head>
+<body>
+  <h1>🎁 All Loyalty Cards ({{count}})</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Customer</th>
+        <th>Loyalty Code</th>
+        <th>Points</th>
+        <th>Tier</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each cards}}
+      <tr>
+        <td>{{customer}}</td>
+        <td><code>{{loyaltyCode}}</code></td>
+        <td>{{points}}</td>
+        <td>{{tier}}</td>
+        <td>
+          <span class="badge {{#if active}}active{{else}}inactive{{/if}}">
+            {{#if active}}Active{{else}}Inactive{{/if}}
+          </span>
+        </td>
+        <td><a href="{{url}}">View Card →</a></td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</body>
+</html>

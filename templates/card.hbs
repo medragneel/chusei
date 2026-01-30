@@ -3,125 +3,625 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Loyalty Card - {{customerName}}</title>
+<title>{{customerName}} - Chusei Loyalty Card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:Arial,sans-serif;background:#2a2a2a;display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100vh;padding:20px;gap:20px;}
-.download-btn{padding:12px 30px;background:linear-gradient(135deg,#14b8a6 0%,#0891b2 100%);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(20,184,166,0.4);transition:all 0.3s ease;display:flex;align-items:center;gap:10px;}
-.download-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(20,184,166,0.6);}
-.download-btn:active{transform:translateY(0);}
-.card{width:800px;min-height:520px;background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,0.5);overflow:visible;position:relative;display:flex;flex-direction:column;}
-.card-header{background:linear-gradient(135deg,#14b8a6 0%,#0891b2 100%);padding:25px 40px;color:#fff;position:relative;}
-.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-.logo-section{display:flex;gap:10px;}
-.logo-circle{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
-.logo-text{font-size:32px;font-weight:bold;color:#14b8a6;}
-.brand-info{display:flex;flex-direction:column;}
-.brand-name{font-size:28px;font-weight:bold;letter-spacing:3px;}
-.tagline{font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:0.9;}
-.status-badge{padding:6px 18px;border-radius:20px;font-size:12px;font-weight:bold;background:rgba(255,255,255,0.2);backdrop-filter:blur(10px);}
-.customer-name{font-size:22px;font-weight:bold;letter-spacing:1px;}
-.card-body{padding:30px 40px;display:grid;grid-template-columns:1fr 1fr;gap:30px;flex:1;}
-.info-section{display:flex;flex-direction:column;gap:20px;}
-.info-row{display:flex;flex-direction:column;gap:5px;}
-.info-label{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:1px;font-weight:600;}
-.info-value{font-size:18px;font-weight:bold;color:#0f172a;}
-.points-display{background:linear-gradient(135deg,#14b8a6 0%,#0891b2 100%);color:#fff;padding:18px;border-radius:12px;text-align:center;}
-.points-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;opacity:0.9;margin-bottom:5px;}
-.points-value{font-size:38px;font-weight:bold;}
-.tier-badge{display:inline-block;padding:6px 14px;border-radius:8px;font-size:13px;font-weight:bold;color:#fff;background:#f59e0b;}
-.codes-section{display:flex;flex-direction:column;gap:15px;align-items:center;justify-content:center;}
-.barcode-container{display:flex;flex-direction:column;align-items:center;gap:8px;background:#f8fafc;padding:15px;border-radius:12px;width:100%;}
-.barcode-label{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:1px;font-weight:600;}
-#barcode{margin:0;}
-.barcode-number{font-family:'Courier New',monospace;font-size:12px;font-weight:bold;color:#0f172a;letter-spacing:2px;}
-.qr-container{display:flex;flex-direction:column;align-items:center;gap:8px;}
-.qr-label{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:1px;font-weight:600;}
-.qr-code img{max-width:110px;max-height:110px;}
-.qr-code{border:8px solid #14b8a6;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#f8fafc;}
-.logo-circle img{width:100%;height:100%;object-fit:contain;}
-.brand-info img{height:50px;width:auto;}
-.qr-placeholder{width:90px;height:90px;}
-.footer{background:#f8fafc;padding:15px 40px;display:flex;justify-content:space-between;align-items:center;border-top:2px solid #e2e8f0;border-radius:0 0 20px 20px;}
-.website{font-size:15px;font-weight:bold;color:#14b8a6;}
-.promo{font-size:13px;color:#64748b;font-weight:600;}
-.pdf-loading{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;z-index:1000;color:#fff;font-size:18px;}
-.pdf-loading.active{display:flex;}
-@media print{
-  body{background:#fff;padding:0;}
-  .download-btn{display:none;}
-  .card{box-shadow:none;margin:0;}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #0a0a0f;
+  color: #fff;
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+/* Animated gradient background */
+.bg-gradient {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #ff006c 0%, #fbfbfb 100%);
+  opacity: 0.08;
+  z-index: 0;
+}
+
+.bg-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 50%, rgba(255, 0, 108, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(251, 251, 251, 0.2) 0%, transparent 50%);
+  animation: pulse 8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
+.header {
+  margin-bottom: 40px;
+  animation: fadeInDown 0.6s ease;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  transition: color 0.3s;
+}
+
+.back-link:hover {
+  color: #fff;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.header-info h1 {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-subtitle {
+  font-size: 16px;
+  color: rgba(255,255,255,0.6);
+}
+
+.download-btn {
+  padding: 14px 28px;
+  background: linear-gradient(135deg, #ff006c 0%, #fbfbfb 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(255, 0, 108, 0.4);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.download-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 0, 108, 0.5);
+}
+
+.download-btn:active {
+  transform: translateY(0);
+}
+
+.download-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Card Showcase */
+.card-showcase {
+  animation: fadeInUp 0.6s ease;
+}
+
+.loyalty-card {
+  background: #fff;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.card-header {
+  background: linear-gradient(135deg, #ff006c 0%, #fb5c8e 100%);
+  padding: 32px 40px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.brand-name {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.status-badge {
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 700;
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(10px);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.customer-info {
+  position: relative;
+  z-index: 1;
+}
+
+.customer-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.8;
+  margin-bottom: 6px;
+}
+
+.customer-name {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.card-body {
+  padding: 40px;
+  background: #fff;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.points-display {
+  background: linear-gradient(135deg, #ff006c 0%, #fb5c8e 100%);
+  color: #fff;
+  padding: 28px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(255, 0, 108, 0.2);
+}
+
+.points-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  opacity: 0.9;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.points-value {
+  font-size: 52px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.info-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.info-label {
+  font-size: 11px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+.info-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.tier-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  background: linear-gradient(135deg, rgba(255, 0, 108, 0.1) 0%, rgba(251, 92, 142, 0.1) 100%);
+  border: 2px solid rgba(255, 0, 108, 0.3);
+  color: #ff006c;
+}
+
+.codes-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+}
+
+.barcode-container {
+  width: 100%;
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  border: 2px solid #e2e8f0;
+}
+
+.barcode-label {
+  font-size: 11px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+#barcode {
+  margin: 0;
+}
+
+.barcode-number {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: 2px;
+}
+
+.qr-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.qr-label {
+  font-size: 11px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+.qr-code {
+  background: #f8fafc;
+  border: 8px solid #ff006c;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(255, 0, 108, 0.2);
+}
+
+.qr-code img {
+  display: block;
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+}
+
+.card-footer {
+  background: linear-gradient(135deg, #f8fafc 0%, #fff 100%);
+  padding: 24px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 2px solid #e2e8f0;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.website {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ff006c;
+}
+
+.promo {
+  font-size: 14px;
+  font-weight: 700;
+  color: #64748b;
+  padding: 8px 16px;
+  background: rgba(255, 0, 108, 0.1);
+  border-radius: 8px;
+}
+
+/* Loading Overlay */
+.pdf-loading {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+.pdf-loading.active {
+  display: flex;
+}
+
+.loading-content {
+  text-align: center;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255,255,255,0.2);
+  border-top-color: #ff006c;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 20px;
+}
+
+.loading-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background: #fff;
+    padding: 0;
+  }
+  .bg-gradient,
+  .header,
+  .download-btn,
+  .pdf-loading {
+    display: none !important;
+  }
+  .loyalty-card {
+    box-shadow: none;
+    margin: 0;
+    max-width: 100%;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-info h1 {
+    font-size: 28px;
+  }
+
+  .card-body {
+    grid-template-columns: 1fr;
+    padding: 28px;
+    gap: 32px;
+  }
+
+  .card-header {
+    padding: 24px 28px;
+  }
+
+  .customer-name {
+    font-size: 22px;
+  }
+
+  .points-value {
+    font-size: 42px;
+  }
+
+  .card-footer {
+    padding: 20px 28px;
+    flex-direction: column;
+    text-align: center;
+  }
 }
 </style>
 </head>
 <body>
+<div class="bg-gradient"></div>
+
 <div class="pdf-loading" id="pdfLoading">
-  <div>Generating PDF...</div>
+  <div class="loading-content">
+    <div class="spinner"></div>
+    <div class="loading-text">Generating PDF...</div>
+  </div>
 </div>
-<button class="download-btn" onclick="downloadPDF()">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-    <polyline points="7 10 12 15 17 10"></polyline>
-    <line x1="12" y1="15" x2="12" y2="3"></line>
-  </svg>
-  Download as PDF
-</button>
-<div class="card">
-  <div class="card-header">
-    <div class="header-top">
-      <div class="logo-section">
-        <div class="logo-circle">
-          <img src="/public/b-logo.svg" alt="b-logo" />
-        </div>
-        <div class="brand-info">
-          <img src="/public/logo.svg" alt="logo" />
-        </div>
-      </div>
-      <div class="status-badge">{{#if isActive}}Active{{else}}Inactive{{/if}}</div>
-    </div>
-    <div class="customer-name">{{customerName}}</div>
-  </div>
 
-  <div class="card-body">
-    <div class="info-section">
-      <div class="points-display">
-        <div class="points-label">Loyalty Points</div>
-        <div class="points-value">{{points}}</div>
-      </div>
-      <div class="info-row">
-        <div class="info-label">Membership Tier</div>
-        <div><span class="tier-badge">{{tier}}</span></div>
-      </div>
-      <div class="info-row">
-        <div class="info-label">Loyalty ID</div>
-        <div class="info-value">{{loyaltyCode}}</div>
-      </div>
-      <div class="info-row">
-        <div class="info-label">Member Since</div>
-        <div class="info-value">{{formatDate memberSince}}</div>
-      </div>
-    </div>
+<div class="container">
+  <div class="header">
+    <a href="/" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="m15 18-6-6 6-6"/>
+      </svg>
+      Back to Home
+    </a>
 
-    <div class="codes-section">
-      <div class="barcode-container">
-        <div class="barcode-label">Scan at Checkout</div>
-        <svg id="barcode"></svg>
-        <div class="barcode-number">{{loyaltyCode}}</div>
+    <div class="header-content">
+      <div class="header-info">
+        <h1>{{customerName}}'s Loyalty Card</h1>
+        <p class="header-subtitle">Chusei Rewards Program</p>
       </div>
-      <div class="qr-container">
-        <div class="qr-label">Contact Us</div>
-        <div class="qr-code">
-          <img src="/public/qr-code.svg" alt="qrcode" />
-        </div>
-      </div>
+      <button class="download-btn" onclick="downloadPDF()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Download PDF
+      </button>
     </div>
   </div>
 
-  <div class="footer">
-    <div class="website">www.blueva.dz</div>
-    <div class="promo">BUY 7, GET 1 FREE</div>
+  <div class="card-showcase">
+    <div class="loyalty-card" id="loyaltyCard">
+      <div class="card-header">
+        <div class="header-top">
+          <div class="brand-section">
+            <div class="brand-logo">
+              <img src="/public/chusei-logo.svg" alt="Chusei Logo" />
+            </div>
+            <div class="brand-name"></div>
+          </div>
+          <div class="status-badge">
+            {{#if isActive}}Active{{else}}Inactive{{/if}}
+          </div>
+        </div>
+        <div class="customer-info">
+          <div class="customer-label">Member Name</div>
+          <div class="customer-name">{{customerName}}</div>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="info-section">
+          <div class="points-display">
+            <div class="points-label">Loyalty Points</div>
+            <div class="points-value">{{points}}</div>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="info-label">Membership Tier</div>
+              <div><span class="tier-badge">{{tier}}</span></div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Loyalty ID</div>
+              <div class="info-value">{{loyaltyCode}}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Member Since</div>
+              <div class="info-value">{{formatDate memberSince}}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="codes-section">
+          <div class="barcode-container">
+            <div class="barcode-label">Scan at Checkout</div>
+            <svg id="barcode"></svg>
+            <div class="barcode-number">{{loyaltyCode}}</div>
+          </div>
+
+          <div class="qr-container">
+            <div class="qr-label">Contact Us</div>
+            <div class="qr-code">
+              <img src="/public/qr-code.svg" alt="QR Code" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="website">www.website.dz</div>
+        <div class="promo">BUY 7, GET 1 FREE</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -134,8 +634,8 @@ if(loyaltyCode !== "N/A" && loyaltyCode){
   try{
     JsBarcode("#barcode", loyaltyCode, {
       format: "CODE128",
-      width: 2,
-      height: 60,
+      width: 2.5,
+      height: 70,
       displayValue: false,
       margin: 0
     });
@@ -150,20 +650,17 @@ async function downloadPDF() {
   const button = document.querySelector('.download-btn');
 
   try {
-    // Show loading
     loading.classList.add('active');
     button.disabled = true;
 
-    // Get the card element
-    const card = document.querySelector('.card');
+    const card = document.getElementById('loyaltyCard');
 
-    // PDF options
     const opt = {
       margin: [10, 10, 10, 10],
-      filename: `loyalty-card-${customerName.replace(/\s+/g, '-')}-${loyaltyCode}.pdf`,
+      filename: `chusei-loyalty-card-${customerName.replace(/\s+/g, '-')}-${loyaltyCode}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: {
-        scale: 2,
+        scale: 2.5,
         useCORS: true,
         logging: false,
         backgroundColor: '#ffffff'
@@ -175,14 +672,12 @@ async function downloadPDF() {
       }
     };
 
-    // Generate PDF
     await html2pdf().set(opt).from(card).save();
 
   } catch(error) {
     console.error('PDF generation error:', error);
     alert('Failed to generate PDF. Please try again.');
   } finally {
-    // Hide loading
     loading.classList.remove('active');
     button.disabled = false;
   }
